@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mercúrio — Laboratório de metal líquido</title>
+  <meta name="description" content="Experimento WebGL2 de Carlos Eduardo: metal líquido renderizado por raymarching em tempo real, com física interativa.">
+  <meta name="theme-color" content="#0A0A0B">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g' cx='.35' cy='.3'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.5' stop-color='%23777'/%3E%3Cstop offset='1' stop-color='%23111'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="canonical" href="https://mercurio-carlos-eduardo.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Mercúrio — Laboratório de metal líquido">
+  <meta property="og:description" content="Metal líquido por raymarching em tempo real, WebGL2 puro. Experimento de Carlos Eduardo.">
+  <meta property="og:url" content="https://mercurio-carlos-eduardo.vercel.app/">
+  <meta property="og:image" content="https://mercurio-carlos-eduardo.vercel.app/preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="gl" aria-label="Gota de metal líquido interativa. Arraste para girar, clique para arrancar gotas, segure para aquecer." role="img"></canvas>
+
+  <div class="frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <header class="hud tl">
+    <h1>Mercúrio</h1>
+    <p>Laboratório de metal líquido<br><span>WebGL2 · raymarching · SDF</span></p>
+  </header>
+
+  <div class="hud tr mono" aria-hidden="true">
+    <div><span id="fps">--</span> FPS</div>
+    <div>RES <span id="res">1.00</span>×</div>
+    <div id="xyz">x 0.00 · y 0.00 · z 0.00</div>
+  </div>
+
+  <section class="hud caption" aria-live="polite">
+    <div class="idx mono"><span id="cur">01</span>/04</div>
+    <h2 id="sname">Gota</h2>
+    <p id="sdesc">Tensão superficial: a menor área para o mesmo volume.</p>
+  </section>
+
+  <nav class="hud br" aria-label="Estados do metal">
+    <ol id="states">
+      <li><button data-s="0" aria-current="true"><span class="mono">01</span>Gota</button></li>
+      <li><button data-s="1"><span class="mono">02</span>Coroa</button></li>
+      <li><button data-s="2"><span class="mono">03</span>Escultura</button></li>
+      <li><button data-s="3"><span class="mono">04</span>Sólido</button></li>
+    </ol>
+  </nav>
+
+  <footer class="hud bl mono">
+    <div class="heat" aria-hidden="true"><b id="heat"></b></div>
+    <p class="hint">arraste · girar &nbsp; clique · arrancar gota &nbsp; segure · aquecer &nbsp; role · estado &nbsp; <kbd>D</kbd> debug</p>
+    <p class="sig">Carlos Eduardo — WebGL Lab</p>
+  </footer>
+
+  <aside id="debug" class="debug mono" hidden aria-label="Painel de depuração">
+    <div class="row"><span>passos do raio</span><output id="o-steps">96</output></div>
+    <input type="range" id="steps" min="32" max="160" step="8" value="96" aria-label="Passos do raio">
+    <div class="row"><span>viscosidade</span><output id="o-visc">1.00</output></div>
+    <input type="range" id="visc" min="0" max="2.5" step="0.05" value="1" aria-label="Viscosidade (amplitude da ondulação)">
+    <div class="row"><span>rugosidade</span><output id="o-rough">0.06</output></div>
+    <input type="range" id="rough" min="0" max="0.6" step="0.01" value="0.06" aria-label="Rugosidade">
+    <div class="row"><span>tom do metal</span><output id="o-tint">0.00</output></div>
+    <input type="range" id="tint" min="-1" max="1" step="0.05" value="0" aria-label="Tom do metal (frio a quente)">
+    <label class="row chk"><span>escala automática</span><input type="checkbox" id="auto" checked></label>
+  </aside>
+
+  <div id="nogl" class="nogl" hidden>
+    <p>Este experimento precisa de WebGL2.<br>Abra num navegador atualizado com aceleração de hardware ligada.</p>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
